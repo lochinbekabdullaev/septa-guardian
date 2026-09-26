@@ -1,23 +1,16 @@
+from septa import get_alerts, get_elevators, get_arrivals
+
+
 def get_service_alerts():
-    return {
-        "alerts": [
-            {
-                "line": "Broad Street Line",
-                "status": "delayed",
-                "delay_minutes": 20,
-                "description": "Northbound service is experiencing delays."
-            }
-        ]
-    }
+    """Get current SEPTA service alerts."""
+    return get_alerts()
 
 
 def get_elevator_outages():
-    return {
-        "outages": [
-            {
-                "station": "City Hall",
-                "status": "out_of_service"
-            }
-        ]
-    }
+    """Get current SEPTA elevator outages."""
+    return get_elevators()
 
+
+def get_station_arrivals(station: str):
+    """Get live SEPTA arrivals for a station."""
+    return get_arrivals(station)

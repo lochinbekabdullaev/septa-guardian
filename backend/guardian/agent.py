@@ -7,6 +7,7 @@ from google import genai
 from guardian.tools import (
     get_service_alerts,
     get_elevator_outages,
+    get_station_arrivals,
 )
 
 from guardian.prompts import SYSTEM_PROMPT
@@ -46,12 +47,27 @@ elevator_outages_tool = {
     },
 }
 
+station_arrivals_tool = {
+    "type": "function",
+    "name": "get_station_arrivals",
+    "description": "Gets live SEPTA Regional Rail arrivals and departures for a station.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "station": {
+                "type": "string",
+                "description": "The SEPTA station name."
+            }
+        },
+        "required": ["station"],
+    },
+}
 
 TOOLS = [
     service_alerts_tool,
     elevator_outages_tool,
+    station_arrivals_tool,
 ]
-
 
 # -----------------------------
 # Tool execution
@@ -65,8 +81,12 @@ def execute_tool(name, arguments):
     if name == "get_elevator_outages":
         return get_elevator_outages()
 
-    raise ValueError(f"Unknown tool: {name}")
+    if name == "get_station_arrivals":
+        return get_station_arrivals(
+            arguments["station"]
+        )
 
+    raise ValueError(f"Unknown tool: {name}")
 
 # -----------------------------
 # Guardian
